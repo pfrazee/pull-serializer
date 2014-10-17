@@ -1,0 +1,22 @@
+{
+  "name": "pull-serializer",
+  "description": "de/serialize pull streams",
+  "version": "0.1.0",
+  "homepage": "https://github.com/pfraze/pull-serializer",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pfraze/pull-serializer.git"
+  },
+  "dependencies": {
+    "pull-split": "~0.1.2"
+  },
+  "devDependencies": {
+    "tape": "~3.0.0",
+    "pull-stream": "~2.26.0"
+  },
+  "scripts": {
+    "test": "set -e; for t in test/*.js; do node $t; done"
+  },
+  "author": "Paul Frazee <pfrazee@gmail.com>",
+  "license": "MIT"
+}
