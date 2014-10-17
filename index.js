@@ -1,26 +1,28 @@
 var pull = require('pull-stream')
 var splitter = require('pull-split')
 
-module.exports = function (ps, _JSON) {
+module.exports = function (ps, _JSON, opts) {
   _JSON = _JSON || JSON
+  opts = opts || {}
   return {
-    sink: pull(splitter(), function(read) {
-      return ps.sink(function(abort, cb) {
-        read(abort, function(ended, data) {
-          if (ended) return cb(ended)
-          if (typeof data == 'string' && data)
-            data = _JSON.parse(data)
-          cb(ended, data)
-        })
-      })
-    }),
-    source: function(abort, cb) {
-      return ps.source(abort, function(ended, data) {
-        if (ended) return cb(ended)
+    sink: pull(
+      splitter(),
+      pull.map(function(data) {
+        try { return _JSON.parse(data) }
+        catch (e) {
+          if (!opts.ignoreErrors)
+            return e
+        }
+      }),
+      pull.filter(),
+      ps.sink
+    ),
+    source: pull(
+      ps.source,
+      pull.map(function(data) {
         if (data !== void 0)
-          data = _JSON.stringify(data) + '\n'
-        cb(ended, data)
+          return _JSON.stringify(data) + '\n'
       })
-    }
+    )
   }
 }

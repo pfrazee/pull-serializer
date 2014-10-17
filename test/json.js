@@ -50,7 +50,7 @@ tape('chunky', function (t) {
       var last = ''
       return function (abort, cb) {
         read(abort, function (ended, data) {
-          if (ended) return cb(ended, last)
+          if (ended) return cb(ended)
 
           if (data.charAt(0) == '{') // the last object?
             return cb(null, last + data) // go ahead and finish
@@ -62,11 +62,59 @@ tape('chunky', function (t) {
         })
       }
     })(),
-    pull.map(function(str) {
-      console.log(typeof str, str)
-      t.assert(typeof str == 'string')
-      return str
-    }),
+    theDuplex
+  )
+})
+
+tape('parse errors', function (t) {
+  var theDuplex = serializer({
+    source: pull.values(['test']),
+    sink: pull.collect(function(err, values) {
+      console.log(values)
+      if (err) throw err
+      t.equal(values[0] instanceof Error, true)
+      t.end()
+    })
+  })
+
+  pull(
+    theDuplex,
+    pull.Through(function (read) {
+      // screw up the data
+      return function (abort, cb) {
+        read(abort, function (ended, data) {
+          if (ended) return cb(ended)
+          cb(null, '"bad json')
+        })
+      }
+    })(),
+    theDuplex
+  )
+})
+
+tape('error suppression', function (t) {
+  var theDuplex = serializer({
+    source: pull.values(['fail', 'success']),
+    sink: pull.collect(function(err, values) {
+      console.log(values)
+      if (err) throw err
+      t.equal(values[0], 'success')
+      t.end()
+    })
+  }, undefined, {ignoreErrors: true})
+
+  pull(
+    theDuplex,
+    pull.Through(function (read) {
+      // screw up the fail message
+      return function (abort, cb) {
+        read(abort, function (ended, data) {
+          if (ended) return cb(ended)
+          if (data == '"fail"\n') return cb(null, '"bad json\n')
+          cb(null, data)
+        })
+      }
+    })(),
     theDuplex
   )
 })
