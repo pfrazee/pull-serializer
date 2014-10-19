@@ -1,7 +1,7 @@
 {
   "name": "pull-serializer",
   "description": "de/serialize pull streams",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "homepage": "https://github.com/pfraze/pull-serializer",
   "repository": {
     "type": "git",
