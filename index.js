@@ -4,9 +4,10 @@ var splitter = require('pull-split')
 module.exports = function (ps, _JSON, opts) {
   _JSON = _JSON || JSON
   opts = opts || {}
+  var separator = opts.separator || '\n'
   return {
     sink: pull(
-      splitter(),
+      splitter(split),
       pull.map(function(data) {
         try { return _JSON.parse(data) }
         catch (e) {
@@ -21,7 +22,7 @@ module.exports = function (ps, _JSON, opts) {
       ps.source,
       pull.map(function(data) {
         if (data !== void 0)
-          return _JSON.stringify(data) + '\n'
+          return _JSON.stringify(data) + separator
       })
     )
   }
