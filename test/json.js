@@ -70,13 +70,13 @@ tape('parse errors', function (t) {
   var theDuplex = serializer({
     source: pull.values(['test']),
     sink: pull.collect(function(err, values) {
-      console.log(values)
-      if (err) throw err
-      t.equal(values[0] instanceof Error, true)
+      console.log(err, values)
+      t.equal(!!err, true)
+      t.equal(values.length, 0)
       t.end()
     })
   })
-
+  
   pull(
     theDuplex,
     pull.Through(function (read) {

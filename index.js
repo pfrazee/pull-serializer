@@ -9,10 +9,12 @@ module.exports = function (ps, _JSON, opts) {
     sink: pull(
       splitter(separator),
       pull.map(function(data) {
+        if (data === '')
+          return data
         try { return _JSON.parse(data) }
         catch (e) {
           if (!opts.ignoreErrors)
-            return e
+            throw e
         }
       }),
       pull.filter(),
