@@ -11,8 +11,7 @@ module.exports = function (ps, _JSON, opts) {
       pull.map(function(data) {
         try { return _JSON.parse(data) }
         catch (e) {
-          if (!opts.ignoreErrors)
-            return e
+          if (!opts.ignoreErrors) throw e
         }
       }),
       pull.filter(),
