@@ -7,7 +7,7 @@ module.exports = function (ps, _JSON, opts) {
   var separator = opts.separator || '\n'
   return {
     sink: pull(
-      splitter(split),
+      splitter(separator),
       pull.map(function(data) {
         try { return _JSON.parse(data) }
         catch (e) {
