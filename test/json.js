@@ -7,7 +7,6 @@ tape('JSON', function (t) {
   var theDuplex = serializer({
     source: pull.values([5, "foo", [1,2,3], {hello: 'world'}]),
     sink: pull.collect(function(err, values) {
-      console.log(values)
       if (err) throw err
       t.equal(values[0], 5)
       t.equal(values[1], "foo")
@@ -20,7 +19,6 @@ tape('JSON', function (t) {
   pull(
     theDuplex,
     pull.map(function(str) {
-      console.log(typeof str, str)
       t.assert(typeof str == 'string')
       return str
     }),
@@ -33,7 +31,6 @@ tape('chunky', function (t) {
   var theDuplex = serializer({
     source: pull.values([55, "foo", [1,2,3], {hello: 'world'}]),
     sink: pull.collect(function(err, values) {
-      console.log(values)
       if (err) throw err
       t.equal(values[0], 55)
       t.equal(values[1], "foo")
@@ -70,7 +67,6 @@ tape('parse errors', function (t) {
   var theDuplex = serializer({
     source: pull.values(['test']),
     sink: pull.collect(function(err, values) {
-      console.log(err, values)
       t.equal(!!err, true)
       t.equal(values.length, 0)
       t.end()
@@ -96,7 +92,6 @@ tape('error suppression', function (t) {
   var theDuplex = serializer({
     source: pull.values(['fail', 'success']),
     sink: pull.collect(function(err, values) {
-      console.log(values)
       if (err) throw err
       t.equal(values[0], 'success')
       t.end()
