@@ -8,11 +8,11 @@
     "url": "git://github.com/pfraze/pull-serializer.git"
   },
   "dependencies": {
-    "pull-split": "~0.1.2"
+    "pull-split": "~0.1.2",
+    "pull-stream": "~2.26.0"
   },
   "devDependencies": {
-    "tape": "~3.0.0",
-    "pull-stream": "~2.26.0"
+    "tape": "~3.0.0"
   },
   "scripts": {
     "test": "set -e; for t in test/*.js; do node $t; done"
