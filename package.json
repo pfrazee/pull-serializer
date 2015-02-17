@@ -12,10 +12,11 @@
     "pull-stream": "~2.26.0"
   },
   "devDependencies": {
+    "faucet": "0.0.1",
     "tape": "~3.0.0"
   },
   "scripts": {
-    "test": "set -e; for t in test/*.js; do node $t; done"
+    "test": "tape test/*.js | faucet"
   },
   "author": "Paul Frazee <pfrazee@gmail.com>",
   "license": "MIT"
